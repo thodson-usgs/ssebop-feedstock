@@ -44,6 +44,13 @@ class Preprocess(beam.PTransform):
         da = da.rename({'x': 'lon', 'y': 'lat'})
         ds = da.to_dataset(name='aet')
         ds = ds['aet'].where(ds['aet'] != 9999)
+        ds['aet'].assign_attrs(
+            scale_factor = 1/1000,
+            units = 'mm',
+            long_name = 'SSEBOP Actual ET (ETa),
+            standard_name = 'ETa',
+        )
+        ds['aet'].attrs = {'scale_factor' : 1/1000},
         ds = ds.expand_dims(time=np.array([time]))
 
         return index, ds
