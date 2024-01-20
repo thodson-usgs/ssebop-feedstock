@@ -47,7 +47,7 @@ class Preprocess(beam.PTransform):
         ds['aet'].assign_attrs(
             scale_factor = 1/1000,
             units = 'mm',
-            long_name = 'SSEBOP Actual ET (ETa),
+            long_name = 'SSEBOP Actual ET (ETa)',
             standard_name = 'ETa',
         )
         ds['aet'].attrs = {'scale_factor' : 1/1000},
