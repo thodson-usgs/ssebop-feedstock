@@ -15,7 +15,7 @@ input_url_pattern = (
     '!/det{yyyyjjj}.modisSSEBopETactual.tif'
 )
 
-start = date(2001, 1, 1)
+start = date(2000, 1, 1)
 end = date(2022, 10, 7)
 dates = pd.date_range(start, end, freq='1D')
 
