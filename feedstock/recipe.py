@@ -44,12 +44,12 @@ class Preprocess(beam.PTransform):
         da = da.rename({'x': 'lon', 'y': 'lat'})
         ds = da.to_dataset(name='aet')
         ds['aet'] = ds['aet'].where(ds['aet'] != 9999)
-        #ds['aet'].assign_attrs(
-        #    scale_factor = 1/1000,
-        #    units = 'mm',
-        #    long_name = 'SSEBOP Actual ET (ETa)',
-        #    standard_name = 'ETa',
-        #)
+        ds['aet'].assign_attrs(
+            scale_factor = 1/1000,
+            units = 'mm',
+            long_name = 'SSEBOP Actual ET (ETa)',
+            standard_name = 'ETa',
+        )
         #ds = ds.expand_dims(time=np.array([time]))
         ds = ds.expand_dims({'time': 1}).assign_coords({'time': [time]})
         #y = x.expand_dims({b_coords.name: b_size}).assign_coords({b_coords.name: b_coords})
@@ -67,6 +67,6 @@ recipe = (
     | StoreToZarr(
         store_name='us-ssebop.zarr',
         combine_dims=pattern.combine_dim_keys,
-        target_chunks={'time': 50, 'lat': int(2834 / 2), 'lon': int(6612 / 6)},
+        target_chunks={'time': 1, 'lat': int(2834 / 2), 'lon': int(6612 / 6)},
     )
 )
