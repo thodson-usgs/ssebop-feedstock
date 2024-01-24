@@ -43,7 +43,7 @@ class Preprocess(beam.PTransform):
         da = rioxarray.open_rasterio(url).drop('band')
         da = da.rename({'x': 'lon', 'y': 'lat'})
         ds = da.to_dataset(name='aet')
-        #ds = ds['aet'].where(ds['aet'] != 9999)
+        ds['aet'] = ds['aet'].where(ds['aet'] != 9999)
         ds = ds.expand_dims(time=np.array([time]))
 
         return index, ds
