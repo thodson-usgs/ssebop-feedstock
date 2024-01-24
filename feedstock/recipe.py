@@ -50,9 +50,8 @@ class Preprocess(beam.PTransform):
             long_name = 'SSEBOP Actual ET (ETa)',
             standard_name = 'ETa',
         )
-        #ds = ds.expand_dims(time=np.array([time]))
-        ds = ds.expand_dims({'time': 1}).assign_coords({'time': [time]})
-        #y = x.expand_dims({b_coords.name: b_size}).assign_coords({b_coords.name: b_coords})
+        ds = ds.expand_dims(time=np.array([time]))
+        #ds = ds.expand_dims({'time': 1}).assign_coords({'time': [time]})
 
 
         return index, ds
