@@ -24,8 +24,7 @@ def make_url(time: pd.Timestamp) -> str:
     return input_url_pattern.format(yyyyjjj=time.strftime('%Y%j'))
 
 
-# pattern = FilePattern(make_url, ConcatDim(name='time', keys=dates, nitems_per_file=1))
-pattern = FilePattern(make_url, concat_dim='time')
+pattern = FilePattern(make_url, ConcatDim(name='time', keys=dates) #, nitems_per_file=1))
 
 class Preprocess(beam.PTransform):
     """Preprocessor transform."""
