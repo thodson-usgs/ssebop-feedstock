@@ -38,12 +38,20 @@ class Preprocess(beam.PTransform):
         time_dim = index.find_concat_dim('time')
         time_index = index[time_dim].value
         time = dates[time_index]
+        time_da = xr.DataArray(time, [('time', time)])
 
         da = rioxarray.open_rasterio(url).drop('band')
         da = da.rename({'x': 'lon', 'y': 'lat'})
         ds = da.to_dataset(name='aet')
         ds['aet'] = ds['aet'].where(ds['aet'] != 9999)
-        ds = ds.expand_dims(time=np.array([time]))
+        #ds['aet'].assign_attrs(
+        #    scale_factor = 1/1000,
+        #    units = 'mm',
+        #    long_name = 'SSEBOP Actual ET (ETa)',
+        #    standard_name = 'ETa',
+        #)
+        #ds = ds.expand_dims(time=np.array([time]))
+        ds = ds.expand_dims(time=time_da)
 
         return index, ds
 
