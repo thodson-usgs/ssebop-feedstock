@@ -38,7 +38,7 @@ class Preprocess(beam.PTransform):
         time_dim = index.find_concat_dim('time')
         time_index = index[time_dim].value
         time = dates[time_index]
-        time_da = xr.DataArray(time, [('time', time)])
+        #time_da = xr.DataArray(time, [('time', time)])
 
         da = rioxarray.open_rasterio(url).drop('band')
         da = da.rename({'x': 'lon', 'y': 'lat'})
@@ -51,7 +51,9 @@ class Preprocess(beam.PTransform):
         #    standard_name = 'ETa',
         #)
         #ds = ds.expand_dims(time=np.array([time]))
-        ds = ds.expand_dims(time=time_da)
+        ds = ds.expand_dims('time': 1}).assign_coords({'time': [time]})
+        #y = x.expand_dims({b_coords.name: b_size}).assign_coords({b_coords.name: b_coords})
+
 
         return index, ds
 
