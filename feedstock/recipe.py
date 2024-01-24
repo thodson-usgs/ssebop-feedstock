@@ -15,7 +15,7 @@ input_url_pattern = (
     '!/det{yyyyjjj}.modisSSEBopETactual.tif'
 )
 
-start = date(2000, 1, 1)
+start = date(2001, 1, 1)
 end = date(2022, 10, 7)
 dates = pd.date_range(start, end, freq='1D')
 
@@ -44,13 +44,6 @@ class Preprocess(beam.PTransform):
         da = da.rename({'x': 'lon', 'y': 'lat'})
         ds = da.to_dataset(name='aet')
         ds = ds['aet'].where(ds['aet'] != 9999)
-        #ds['aet'].assign_attrs(
-        #    scale_factor = 1/1000,
-        #    units = 'mm',
-        #    long_name = 'SSEBOP Actual ET (ETa)',
-        #    standard_name = 'ETa',
-        #)
-        #ds['aet'].attrs = {'scale_factor' : 1/1000},
         ds = ds.expand_dims(time=np.array([time]))
 
         return index, ds
@@ -65,6 +58,6 @@ recipe = (
     | StoreToZarr(
         store_name='us-ssebop.zarr',
         combine_dims=pattern.combine_dim_keys,
-        target_chunks={'time': 50, 'lat': int(2834 / 280), 'lon': int(6612 / 660)},
+        target_chunks={'time': 1, 'lat': int(2834 / 2), 'lon': int(6612 / 6)},
     )
 )
